@@ -3,7 +3,7 @@
 IncludeModuleLangFile(__FILE__);
 function Agent_ex_610($old_timestamp = null)
 {
-    // Если первый запуск, берём текущее время минус 24 часа
+    
     if ($old_timestamp !== null) {
         // Фильтр: активные элементы, изменённые после предыдущего запуска
         $arFilter = [

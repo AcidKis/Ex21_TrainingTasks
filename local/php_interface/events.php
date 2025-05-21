@@ -100,32 +100,28 @@ class Ex2_Handlers
             ['FIELDS' => ['ID'], 'SELECT' => ['UF_USER_CLASS']]
         )->fetch();
 
-        if ($arUser['UF_USER_CLASS']) {
-            Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']] = $arUser['UF_USER_CLASS'];
-        } else {
-            Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']] = GetMessage('NO_CLASS');
-        }
+        Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']] = $arUser['UF_USER_CLASS'];
+   
     }
 
     public static function OnAfterUserUpdateHandler(&$arFields)
     {
-
         if ($arFields['UF_USER_CLASS'] != Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']]) {
-            if (Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']] != GetMessage('NO_STATUS')) {
+            if (Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']]) {
                 $arElement = CUserFieldEnum::GetList(
                     [],
                     ['ID' => Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']], 'USER_FIELD_ID' => UF_CLASS]
                 )->fetch();
                 $old = $arElement['VALUE'];
             } else {
-                $old = Ex2_Handlers::$data['OLD_CLASS'][$arFields['ID']];
+                $old = GetMessage('NO_CLASS');
             }
             if ($arFields['UF_USER_CLASS']) {
                 $arElement = CUserFieldEnum::GetList(
                     [],
                     ['ID' => $arFields['UF_USER_CLASS'], 'USER_FIELD_ID' => UF_CLASS]
                 )->fetch();
-                $new = $arElement['NAME'];
+                $new = $arElement['VALUE'];
             } else {
                 $new = GetMessage('NO_CLASS');
             }
