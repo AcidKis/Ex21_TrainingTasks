@@ -1,4 +1,6 @@
 <?
+use Bitrix\Main\Localization\Loc;
+
 //ex2-590
 AddEventHandler('iblock', 'OnBeforeIBlockElementAdd', ['Ex2_Handlers', 'OnBeforeIBlockElementAddHandler']);
 AddEventHandler('iblock', 'OnBeforeIBlockElementUpdate', ['Ex2_Handlers', 'OnBeforeIBlockElementUpdateHandler']);
@@ -14,8 +16,8 @@ AddEventHandler('main', 'OnBuildGlobalMenu', ['Ex2_Handlers', 'OnBuildGlobalMenu
 AddEventHandler("main", "OnBeforeEventSend", ['Ex2_Handlers', 'OnBeforeEventSendHandler']);
 
 
-
-IncludeModuleLangFile(__FILE__);
+Loc::loadMessages(__FILE__);
+//IncludeModuleLangFile(__FILE__);
 class Ex2_Handlers
 {
     private static $data;
@@ -28,7 +30,7 @@ class Ex2_Handlers
                 $arFields['PREVIEW_TEXT'] = str_replace('#del#', '', $arFields['PREVIEW_TEXT']);
             }
             if (mb_strlen($arFields['PREVIEW_TEXT']) < 5) {
-                $APPLICATION->ThrowException(GetMessage('PREVIEW_TEXT_ERROR', ['#len#' => mb_strlen($arFields['PREVIEW_TEXT'])]));
+                $APPLICATION->ThrowException(Loc::getMessage('PREVIEW_TEXT_ERROR', ['#len#' => mb_strlen($arFields['PREVIEW_TEXT'])]));
                 return false;
             }
         }
@@ -41,7 +43,7 @@ class Ex2_Handlers
                 $arFields['PREVIEW_TEXT'] = str_replace('#del#', '', $arFields['PREVIEW_TEXT']);
             }
             if (mb_strlen($arFields['PREVIEW_TEXT']) < 5) {
-                $APPLICATION->ThrowException(GetMessage('PREVIEW_TEXT_ERROR', ['#len#' => mb_strlen($arFields['PREVIEW_TEXT'])]));
+                $APPLICATION->ThrowException(Loc::getMessage('PREVIEW_TEXT_ERROR', ['#len#' => mb_strlen($arFields['PREVIEW_TEXT'])]));
                 return false;
             }
 
@@ -57,7 +59,7 @@ class Ex2_Handlers
             if ($old_author) {
                 Ex2_Handlers::$data['old_author'][$arFields["ID"]] = $old_author;
             } else {
-                Ex2_Handlers::$data['old_author'][$arFields["ID"]] = GetMessage('NO_AUTHOR');
+                Ex2_Handlers::$data['old_author'][$arFields["ID"]] = Loc::getMessage('NO_AUTHOR');
             }
         }
     }
@@ -75,10 +77,10 @@ class Ex2_Handlers
                 $new_author = $prop['VALUE'];
             }
             if (!$new_author) {
-                $new_author = GetMessage('NO_AUTHOR');
+                $new_author = Loc::getMessage('NO_AUTHOR');
             }
             if ($new_author != Ex2_Handlers::$data['old_author'][$arFields["ID"]]) {
-                $mess = GetMessage('NEW_AUTHOR', ['#ID#' => $arFields['ID'], '#old#' => Ex2_Handlers::$data['old_author'][$arFields["ID"]], '#new#' => $new_author]);
+                $mess = Loc::getMessage('NEW_AUTHOR', ['#ID#' => $arFields['ID'], '#old#' => Ex2_Handlers::$data['old_author'][$arFields["ID"]], '#new#' => $new_author]);
 
 
                 CEventLog::Add(
@@ -114,7 +116,7 @@ class Ex2_Handlers
                 )->fetch();
                 $old = $arElement['VALUE'];
             } else {
-                $old = GetMessage('NO_CLASS');
+                $old = Loc::getMessage('NO_CLASS');
             }
             if ($arFields['UF_USER_CLASS']) {
                 $arElement = CUserFieldEnum::GetList(
@@ -123,7 +125,7 @@ class Ex2_Handlers
                 )->fetch();
                 $new = $arElement['VALUE'];
             } else {
-                $new = GetMessage('NO_CLASS');
+                $new = Loc::getMessage('NO_CLASS');
             }
             $arEventFields = array(
                 'old_class' => $old,
@@ -222,8 +224,8 @@ class Ex2_Handlers
                 $arTemplate["MESSAGE"] = str_replace('#CLASS#', $arElement['VALUE'], $arTemplate["MESSAGE"]); 
                 //$arFields['CLASS'] = $arElement['VALUE'];
             } else {
-                $arTemplate["MESSAGE"] = str_replace('#CLASS#', GetMessage('NO_CLASS'), $arTemplate["MESSAGE"]);
-                //$arFields['CLASS'] = GetMessage('NO_CLASS');
+                $arTemplate["MESSAGE"] = str_replace('#CLASS#', Loc::getMessage('NO_CLASS'), $arTemplate["MESSAGE"]);
+                //$arFields['CLASS'] = Loc::getMessage('NO_CLASS');
             }
         }
     }

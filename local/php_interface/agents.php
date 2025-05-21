@@ -1,6 +1,9 @@
 <?
+use Bitrix\Main\Loader;
+use Bitrix\Main\Localization\Loc;
 //ex2-610
-IncludeModuleLangFile(__FILE__);
+//IncludeModuleLangFile(__FILE__);
+Loc::loadMessages(__FILE__);
 function Agent_ex_610($old_timestamp = null)
 {
     
@@ -11,8 +14,8 @@ function Agent_ex_610($old_timestamp = null)
             ">TIMESTAMP_X"  => ConvertTimeStamp($old_timestamp, 'FULL'), // Преобразуем в MySQL DATETIME
             "IBLOCK_ID"     => ID_IBLOCK_REVIEWS
         ];
-
-        CModule::IncludeModule('iblock');
+        Loader::includeModule("iblock");
+        //CModule::IncludeModule('iblock');
         $rsElement = CIBlockElement::GetList(
             ["SORT" => "ASC"],
             $arFilter,
@@ -29,7 +32,7 @@ function Agent_ex_610($old_timestamp = null)
         $count = count($arElements);
 
         // Формируем сообщение для лога
-        $mess = GetMessage('AGENT_MESSAGE', [
+        $mess = Loc::getMessage('AGENT_MESSAGE', [
             '#date#'  => FormatDate('d.m.Y H:i:s', $old_timestamp), // Дата предыдущего запуска
             '#count#' => $count
         ]);
